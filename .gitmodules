@@ -1,0 +1,3 @@
+[submodule "puremvc-lua"]
+	path = puremvc-lua
+	url = https://github.com/themoonbear/puremvc-lua.git
