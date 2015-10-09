@@ -47,6 +47,7 @@ function class(className,super,disableAutoSuperConstruction)
         cls.ctor(instance,...)
       end
     end
+    instance.currentSuper = cls.super
     construct(cls,...)
     return instance
   end
@@ -55,28 +56,41 @@ function class(className,super,disableAutoSuperConstruction)
 end
 
 function super(obj,...)
-  if obj.super then
-    local construct = function(cls,...)
+  if obj.currentSuper then
+    local construct
+    construct = function(cls,...)
       if cls.super and not cls.__disableAutoSuperConstruction then
         construct(cls.super,...)
       end
-      if rawget(cls.super,"ctor") then
-        cls.super.ctor(obj,...)
+      if rawget(cls,"ctor") then
+        obj.currentSuper = cls.super
+        cls.ctor(obj,...)
       end
     end
-    if obj.super.super then
-      construct(obj.super.super,...)
-    end
-    if rawget(obj.super,"ctor") then
-      obj.super.ctor(obj,...)
-    end
+    construct(obj.currentSuper,...)
   end
 end
 
-function new(class,...)
-  local instance = setmetatable({},class)
-  instance.class = class
-  instance:ctor(...)
+
+function new(cls,...)
+  local instance = setmetatable({},cls)
+  instance.class = cls
+  local function construct(cls,...)
+    if rawget(cls,"ctor") then
+      cls.ctor(instance,...)
+    end
+    if cls.super and not cls.__disableAutoSuperConstruction then
+      construct(cls.super,...)
+    end
+
+  end
+  if cls.super and not cls.__disableAutoSuperConstruction then
+    construct(cls.super,...)
+  end
+  if rawget(cls,"ctor") then
+    cls.ctor(instance,...)
+    instance.currentSuper = cls.super
+  end
   return instance
 end
 

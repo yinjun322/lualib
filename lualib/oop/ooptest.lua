@@ -54,3 +54,37 @@ delete(obj3)
 
 print("------------------test2------------end")
 
+local testCls3 = class("testCls3",testCls2,true)
+
+function testCls3:ctor()
+  --super(self)
+  print("testCls3:ctor")
+end
+
+function testCls3:dtor()
+  print("testCls3:dtor")
+end
+
+print("------------------test3---------------start")
+local obj4 = testCls3.new()
+delete(obj4)
+print("------------------test3----------------end")
+
+local testCls4 = class("testCls4",testCls3,true)
+
+function testCls4:ctor()
+  super(self)
+  print("testCls4:ctor")
+end
+
+function testCls4:dtor()
+  print("testCls4:dtor")
+end
+
+print("------------------test4------------------start")
+local obj5 = testCls4.new()
+delete(obj5)
+print("------------------test4------------------end")
+
+
+
