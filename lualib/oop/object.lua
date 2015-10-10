@@ -35,7 +35,7 @@ function class(className,super,disableAutoSuperConstruction)
 
   cls.__cname = className
   cls.__index = cls
-  cls.__disableAutoSuperConstruction = disableAutoSuperConstruction
+  cls.__disableAutoSuperConstruction = disableAutoSuperConstruction or false
   function cls.new(...)
     local instance = setmetatable({},cls)
     instance.class = cls
@@ -44,6 +44,7 @@ function class(className,super,disableAutoSuperConstruction)
         construct(cls.super)
       end
       if rawget(cls,"ctor")  then
+        instance.currentSuper = cls.super
         cls.ctor(instance,...)
       end
     end
@@ -63,6 +64,7 @@ function super(obj,...)
         construct(cls.super,...)
       end
       if rawget(cls,"ctor") then
+        --因为只有super才会用到currentsuper这个变量,所以在调用前设置正确就ok
         obj.currentSuper = cls.super
         cls.ctor(obj,...)
       end
@@ -77,6 +79,7 @@ function new(cls,...)
   instance.class = cls
   local function construct(cls,...)
     if rawget(cls,"ctor") then
+      instance.currentSuper = cls.super
       cls.ctor(instance,...)
     end
     if cls.super and not cls.__disableAutoSuperConstruction then
@@ -88,6 +91,7 @@ function new(cls,...)
     construct(cls.super,...)
   end
   if rawget(cls,"ctor") then
+    instance.currentSuper = cls.super
     cls.ctor(instance,...)
     instance.currentSuper = cls.super
   end

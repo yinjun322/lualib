@@ -6,6 +6,8 @@ require "object"
 
 print("ooptest")
 
+-- test1
+print("-----------------test1------start---------")
 local testCls = class("testCls")
 
 function testCls:ctor()
@@ -20,8 +22,6 @@ function testCls:dtor()
   print("testCls:dtor")
 end
 
--- test1
-print("-----------------test1------start---------")
 
 local obj1 = testCls.new()
 obj1:func1()
@@ -36,6 +36,11 @@ print("------------------test2------------start")
 local testCls2 = class("testCls2",testCls)
 function testCls2:ctor()
   print("testCls2:ctor")
+end
+
+function testCls2:func1()
+  testCls.func1(self)
+  print("testCls2:func1")
 end
 
 function testCls2:dtor()
@@ -54,10 +59,11 @@ delete(obj3)
 
 print("------------------test2------------end")
 
+print("------------------test3---------------start")
 local testCls3 = class("testCls3",testCls2,true)
 
 function testCls3:ctor()
-  --super(self)
+  super(self)
   print("testCls3:ctor")
 end
 
@@ -65,11 +71,11 @@ function testCls3:dtor()
   print("testCls3:dtor")
 end
 
-print("------------------test3---------------start")
 local obj4 = testCls3.new()
 delete(obj4)
 print("------------------test3----------------end")
 
+print("------------------test4------------------start")
 local testCls4 = class("testCls4",testCls3,true)
 
 function testCls4:ctor()
@@ -81,10 +87,35 @@ function testCls4:dtor()
   print("testCls4:dtor")
 end
 
-print("------------------test4------------------start")
-local obj5 = testCls4.new()
-delete(obj5)
+local obj = testCls4.new()
+delete(obj)
 print("------------------test4------------------end")
+
+print("------------------test5------------------start")
+local testCls5 = class("testCls5",testCls4)
+function testCls5:ctor()
+  print("testCls5:ctor")
+end
+function testCls5:dtor()
+  print("testCls5:dtor")
+end
+local obj = testCls5.new()
+delete(obj)
+print("------------------test5------------------end")
+
+print("------------------test6------------------start")
+local testCls6 = class("testCls6",testCls5,true)
+function testCls6:ctor()
+  super(self)
+  print("testCls6:ctor")
+end
+function testCls6:dtor()
+  print("testCls6:dtor")
+end
+local obj = new(testCls6)
+obj.func1()
+delete(obj)
+print("------------------test6------------------end")
 
 
 
