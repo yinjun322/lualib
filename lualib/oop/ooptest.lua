@@ -122,7 +122,7 @@ function testCls6:dtor()
   print("testCls6:dtor")
 end
 local obj = new(testCls6)
-obj.func1()
+obj:func1()
 delete(obj)
 print("------------------test6------------------end")
 
