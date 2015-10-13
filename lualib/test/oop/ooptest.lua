@@ -1,8 +1,10 @@
 -- oop test
 -- 专门用来测试 object.lua 中的各种方法
 
+package.path = package.path .. ";" .. "./../../?.lua"
 
-require "object"
+
+require "oop/object"
 
 print("ooptest")
 
