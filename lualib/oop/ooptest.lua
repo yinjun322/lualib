@@ -12,10 +12,14 @@ local testCls = class("testCls")
 
 function testCls:ctor()
   print("testCls:ctor")
+  self.yinjun = "sb"
+  self.yinjun1 = "sb1 yinjun"
 end
 
 function testCls:func1()
   print("testCls:func1")
+  print("test 1 : " .. self.yinjun1)
+  print("test 1 : " .. self.yinjun)
 end
 
 function testCls:dtor()
@@ -36,11 +40,16 @@ print("------------------test2------------start")
 local testCls2 = class("testCls2",testCls)
 function testCls2:ctor()
   print("testCls2:ctor")
+  self.yinjun = "sb 2"
+  self.yinjun2 = "sb2 yinjun"
 end
 
 function testCls2:func1()
   testCls.func1(self)
   print("testCls2:func1")
+  print("test 2 : " .. self.yinjun2)
+  print("test 2 : " .. self.yinjun)
+  print("test 2 : " .. self.yinjun1)
 end
 
 function testCls2:dtor()
